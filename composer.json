@@ -1,11 +1,15 @@
 {
-    "name": "mmoreram/rsqueue-bundle",
+    "name": "metronomeagency/rsqueue-bundle",
     "type": "symfony-bundle",
     "description": "Redis Symfony2 Queue Bundle, a simple and soft redis based message queue for symfony2",
     "keywords": ["rsqueue", "redis", "queue", "symfony"],
     "homepage":  "http://rsqueue.com",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Metronome Agency",
+            "email": "developer@metronome.com.au"
+        },
         {
             "name": "Marc Morera",
             "email": "yuhu@mmoreram.com"
