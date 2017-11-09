@@ -5,7 +5,6 @@ parameters:
     rs_queue.resolver.queuealias.class: Mmoreram\RSQueueBundle\Resolver\QueueAliasResolver
 
 services:
-
     rs_queue.serializer.factory:
         class: "%rs_queue.serializer.factory.class%"
         arguments: ["%rs_queue.serializer.class%"]
@@ -24,30 +23,39 @@ services:
         class: "%rs_queue.resolver.queuealias.class%"
         arguments: ["%rs_queue.queues%"]
 
-    rs_queue.service:
+    Mmoreram\RSQueueBundle\Services\Abstracts\AbstractService:
         abstract: true
-        class: Mmoreram\RSQueueBundle\Services\Abstracts\AbstractService
         arguments:
             $eventDispatcher: "@event_dispatcher"
             $redis: "@rs_queue.redis"
             $queueAliasResolver: "@rs_queue.resolver.queuealias"
             $serializer: "@rs_queue.serializer"
+    rs_queue.service:
+        alias: Mmoreram\RSQueueBundle\Services\Abstracts\AbstractService
+
+    Mmoreram\RSQueueBundle\Services\Consumer:
+        parent: rs_queue.service
 
     rs_queue.consumer:
-        class: Mmoreram\RSQueueBundle\Services\Consumer
+        alias: Mmoreram\RSQueueBundle\Services\Consumer
+
+    Mmoreram\RSQueueBundle\Services\Producer:
         parent: rs_queue.service
 
     rs_queue.producer:
-        class: Mmoreram\RSQueueBundle\Services\Producer
+        alias: Mmoreram\RSQueueBundle\Services\Producer
+
+    Mmoreram\RSQueueBundle\Services\Publisher:
         parent: rs_queue.service
 
     rs_queue.publisher:
-        class: Mmoreram\RSQueueBundle\Services\Publisher
-        parent: rs_queue.service
+        alias: Mmoreram\RSQueueBundle\Services\Publisher
 
-    rs_queue.data_collector:
-        class: Mmoreram\RSQueueBundle\Collector\RSQueueCollector
+    Mmoreram\RSQueueBundle\Collector\RSQueueCollector:
         tags:
             - { name: data_collector, template: "RSQueueBundle:Collector:rsqueue", id: "rsqueue_collector" }
             - { name: kernel.event_listener, event: rsqueue.producer, method: onProducerAction }
             - { name: kernel.event_listener, event: rsqueue.publisher, method: onPublisherAction }
+
+    rs_queue.data_collector:
+        alias: Mmoreram\RSQueueBundle\Collector\RSQueueCollector
